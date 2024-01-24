@@ -2,20 +2,8 @@
 能够生成配种图， 下面是结果展示
 
 
-    <!DOCTYPE html>
-    <html>
-    <head>
-    </head>
-    <body>
-        <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Awesome-pyecharts</title>
-                <script type="text/javascript" src="https://assets.pyecharts.org/assets/v5/echarts.min.js"></script>
 
-</head>
-<body><h1>云海鹿</h1>
+<h1>云海鹿</h1>
     <div id="029779698e634b3abf003caa2e0acf38" class="chart-container" style="width:1000px; height:600px; "></div>
     <script>
         var chart_029779698e634b3abf003caa2e0acf38 = echarts.init(
@@ -19382,8 +19370,6 @@
 };
         chart_817a5901f72a489d8c2d7bbff44f949d.setOption(option_817a5901f72a489d8c2d7bbff44f949d);
     </script>
-</body>
-</html>
 
     </body>
     </html>
