@@ -73,7 +73,7 @@ def find_combinations(items, data):
 
 def main():
     file_path = 'combinations.csv'
-    input_items = ['棉悠悠', '幻悦蝶', '波霸牛']
+    input_items = ['紫霞鹿', '天擒鸟']
     data = read_csv(file_path)
     combinations = find_combinations(input_items, data)
     # 初始化一个字符串，用于保存所有图表的 HTML 代码
