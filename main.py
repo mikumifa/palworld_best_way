@@ -74,9 +74,8 @@ def find_combinations(items, data):
     return combinations
 
 
-def main():
+def main(input_items):
     file_path = "combinations.csv"
-    input_items = ["紫霞鹿", "天擒鸟"]
     data = read_csv(file_path)
     combinations = find_combinations(input_items, data)
     # 初始化一个字符串，用于保存所有图表的 HTML 代码
@@ -103,4 +102,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_items", nargs="*")
+    args = parser.parse_args()
+    main(args.input_items)
