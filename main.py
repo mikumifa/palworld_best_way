@@ -1,5 +1,5 @@
-import itertools
 import csv
+import itertools
 import re
 
 from pyecharts import options as opts
@@ -19,21 +19,22 @@ def build_tree_data(tree):
 
 def draw_tree(tree, tree_name):
     tree_data = build_tree_data(tree)
-    c = (
-        Tree(init_opts=opts.InitOpts(width="1000px", height="600px"))
-        .add("", [tree_data], collapse_interval=2, orient="TB")
+    c = Tree(init_opts=opts.InitOpts(width="1000px", height="600px")).add(
+        "", [tree_data], collapse_interval=2, orient="TB"
     )
 
     html_code = c.render("temp.html")
     with open("temp.html", "r", encoding="utf-8") as file:
         html_content = file.read()
-    html_code_with_title = re.sub(r"<body\b[^>]*>", f"<body><h1>{tree_name}</h1>", html_content)
+    html_code_with_title = re.sub(
+        r"<body\b[^>]*>", f"<body><h1>{tree_name}</h1>", html_content
+    )
     return html_code_with_title
 
 
 def read_csv(file_path):
     data = []
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         reader = csv.reader(file)
         for row in reader:
             data.append(row)
@@ -56,7 +57,9 @@ def find_combinations(items, data):
             # 排序去重复
             a, b = sorted(combination, key=lambda x: x[0])
             for row in data:
-                if (a[0] == row[0] and b[0] == row[1]) or (a[0] == row[1] and b[0] == row[0]):
+                if (a[0] == row[0] and b[0] == row[1]) or (
+                    a[0] == row[1] and b[0] == row[0]
+                ):
                     # 新元素
                     new_item = (row[2], (a, b))
                     if new_item[0] not in combinations:
@@ -72,8 +75,8 @@ def find_combinations(items, data):
 
 
 def main():
-    file_path = 'combinations.csv'
-    input_items = ['紫霞鹿', '天擒鸟']
+    file_path = "combinations.csv"
+    input_items = ["紫霞鹿", "天擒鸟"]
     data = read_csv(file_path)
     combinations = find_combinations(input_items, data)
     # 初始化一个字符串，用于保存所有图表的 HTML 代码
