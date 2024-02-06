@@ -48,14 +48,15 @@ def find_combinations(items, data):
     :return:  返回具体的配种情况，元祖嵌套树
     """
     combinations = {}
+    item_tree_list = []
     next_item_tree_list = [(item, ()) for item in items]
     iter_time = 0
     while True:
         add_class_time = 0
-        item_tree_list = [item for item in next_item_tree_list]
-        for combination in itertools.permutations(item_tree_list, 2):
-            # 排序去重复
-            a, b = sorted(combination, key=lambda x: x[0])
+        item_tree_list = item_tree_list + next_item_tree_list
+        new_combinations = itertools.product(item_tree_list, next_item_tree_list)
+        next_item_tree_list = []
+        for a, b in new_combinations:
             for row in data:
                 if (a[0] == row[0] and b[0] == row[1]) or (
                     a[0] == row[1] and b[0] == row[0]
@@ -67,7 +68,8 @@ def find_combinations(items, data):
                         add_class_time += 1
                         next_item_tree_list.append(new_item)
                         combinations[new_item[0]] = new_item[1]
-        print(f"第{iter_time}次迭代,添加种类：{add_class_time}")
+                        print(new_item[0], end=", ")
+        print(f"\n第{iter_time}次迭代,添加种类：{add_class_time}")
         if add_class_time == 0:
             break
         iter_time += 1
