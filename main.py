@@ -1,5 +1,5 @@
-import itertools
 import csv
+import itertools
 import re
 
 from pyecharts import options as opts
@@ -19,21 +19,22 @@ def build_tree_data(tree):
 
 def draw_tree(tree, tree_name):
     tree_data = build_tree_data(tree)
-    c = (
-        Tree(init_opts=opts.InitOpts(width="1000px", height="600px"))
-        .add("", [tree_data], collapse_interval=2, orient="TB")
+    c = Tree(init_opts=opts.InitOpts(width="1000px", height="600px")).add(
+        "", [tree_data], collapse_interval=2, orient="TB"
     )
 
     html_code = c.render("temp.html")
     with open("temp.html", "r", encoding="utf-8") as file:
         html_content = file.read()
-    html_code_with_title = re.sub(r"<body\b[^>]*>", f"<body><h1>{tree_name}</h1>", html_content)
+    html_code_with_title = re.sub(
+        r"<body\b[^>]*>", f"<body><h1>{tree_name}</h1>", html_content
+    )
     return html_code_with_title
 
 
 def read_csv(file_path):
     data = []
-    with open(file_path, 'r', encoding='utf-8') as file:
+    with open(file_path, "r", encoding="utf-8") as file:
         reader = csv.reader(file)
         for row in reader:
             data.append(row)
@@ -47,16 +48,19 @@ def find_combinations(items, data):
     :return:  返回具体的配种情况，元祖嵌套树
     """
     combinations = {}
+    item_tree_list = []
     next_item_tree_list = [(item, ()) for item in items]
     iter_time = 0
     while True:
         add_class_time = 0
-        item_tree_list = [item for item in next_item_tree_list]
-        for combination in itertools.permutations(item_tree_list, 2):
-            # 排序去重复
-            a, b = sorted(combination, key=lambda x: x[0])
+        item_tree_list = item_tree_list + next_item_tree_list
+        new_combinations = itertools.product(item_tree_list, next_item_tree_list)
+        next_item_tree_list = []
+        for a, b in new_combinations:
             for row in data:
-                if (a[0] == row[0] and b[0] == row[1]) or (a[0] == row[1] and b[0] == row[0]):
+                if (a[0] == row[0] and b[0] == row[1]) or (
+                    a[0] == row[1] and b[0] == row[0]
+                ):
                     # 新元素
                     new_item = (row[2], (a, b))
                     if new_item[0] not in combinations:
@@ -64,16 +68,16 @@ def find_combinations(items, data):
                         add_class_time += 1
                         next_item_tree_list.append(new_item)
                         combinations[new_item[0]] = new_item[1]
-        print(f"第{iter_time}次迭代,添加种类：{add_class_time}")
+                        print(new_item[0], end=", ")
+        print(f"\n第{iter_time}次迭代,添加种类：{add_class_time}")
         if add_class_time == 0:
             break
         iter_time += 1
     return combinations
 
 
-def main():
-    file_path = 'combinations.csv'
-    input_items = ['紫霞鹿', '天擒鸟']
+def main(input_items):
+    file_path = "combinations.csv"
     data = read_csv(file_path)
     combinations = find_combinations(input_items, data)
     # 初始化一个字符串，用于保存所有图表的 HTML 代码
@@ -100,4 +104,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_items", nargs="*")
+    args = parser.parse_args()
+    main(args.input_items)
